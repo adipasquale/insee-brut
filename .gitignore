@@ -1,0 +1,4 @@
+scrapy-project/*.json
+.vscode
+*.pyc
+*.DS_Store
