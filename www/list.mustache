@@ -1,0 +1,99 @@
+<!DOCTYPE HTML>
+<html>
+
+<head>
+  <meta charset="utf-8" />
+  <title>INSEE Brut</title>
+  <link href='tachyons-4.11.1.css' rel='stylesheet' type='text/css'>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+</head>
+
+<body>
+
+<nav class="db dt-m w-100 bb border-box pa3 ph5-m">
+  <a class="db dtc-m v-mid mid-gray link dim w-100 w-25-m tc tl-m mb2 mb0-m" href="index.html" title="Home">
+    INSEE Brut
+  </a>
+  <div class="db dtc-m v-mid w-100 w-75-m tc tr-m">
+    <a class="link dim dark-gray f6 f5-m dib" href="#" title="Contact">A Propos</a>
+  </div>
+</nav>
+
+{{#items}}
+  <article class="center mw5 mw6-ns br3 hidden ba b--black-10 mv4">
+    <h1 class="f4 bg-near-white br3 br--top mv0 pv2 ph3">
+      <a href="{{path}}" class="black-90">
+        {{titre}}
+      </a>
+    </h1>
+    <div class="pa3 bt b--black-10">
+
+      <div class="fr">
+        <span class="dib ba pa1 b--purple bg-purple white br-pill">
+          {{insee_type}}
+        </span>
+
+        <span class="dib ba pa1 br-pill">
+          {{libelle_geographique}}
+        </span>
+      </div>
+
+      <p class="i">
+        publié le {{date_diffusion_lisible}}
+      </p>
+
+      <p class="f6 f5-ns lh-copy measure">
+        {{sous_titre}}
+      </p>
+    </div>
+  </article>
+{{/items}}
+
+<div class="center tc mv3">
+  <p>
+    page
+  </p>
+  <ul class="list">
+    {{#first_page}}
+      <li class="dib">
+        <a href="{{path}}" class="dib">
+          {{num}}
+        </a>
+      </li>
+      <li class="dib">...</li>
+    {{/first_page}}
+
+    {{#pages_before}}
+      <li class="dib">
+        <a href="{{path}}">
+          {{num}}
+        </a>
+      </li>
+    {{/pages_before}}
+
+    <li class="dib b">
+      {{page}}
+    </li>
+
+    {{#pages_after}}
+      <li class="dib">
+        <a href="{{path}}" class="dib">
+          {{num}}
+        </a>
+      </li>
+    {{/pages_after}}
+
+    {{#last_page}}
+      <li class="dib">...</li>
+      <li class="dib">
+        <a href="{{path}}" class="dib">
+          {{num}}
+        </a>
+      </li>
+    {{/last_page}}
+  </ul>
+</div>
+
+</body>
+
+</html>

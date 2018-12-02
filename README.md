@@ -29,7 +29,7 @@ shub deploy 362041
 ```
 mkvirtualenv insee-brut
 workon insee-brut
-pip3 install -f requirements.txt
+pip3 install -r requirements.txt -r requirements-dev.txt
 ```
 
 To start a crawl :

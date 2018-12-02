@@ -4,3 +4,6 @@ scrapy-project/project.egg-info/
 .vscode
 *.pyc
 *.DS_Store
+.env
+www/build
+tmp
