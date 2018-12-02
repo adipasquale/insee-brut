@@ -8,6 +8,22 @@ The Scrapy spider will run nightly on [ScrapingHub](https://scrapinghub.com/). I
 
 Then, a python build script will recompile Mustache templates using the scraped data and publish it. This will run on [Netlify](https://www.netlify.com/).
 
+## Deploy Scrapy spider to Scrapinghub
+
+The first time, you need the shub dependency
+
+```
+pip3 install shub
+shub login
+```
+
+And then each time you want to deploy :
+
+```
+cd scrapy-project
+shub deploy 362041
+```
+
 ## Local setup
 
 ```

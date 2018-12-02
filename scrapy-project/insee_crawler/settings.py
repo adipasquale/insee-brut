@@ -1,4 +1,5 @@
 # -*- coding: utf-8 -*-
+import datetime
 
 # Scrapy settings for insee_crawler project
 #
@@ -89,7 +90,7 @@ ROBOTSTXT_OBEY = True
 #HTTPCACHE_IGNORE_HTTP_CODES = []
 #HTTPCACHE_STORAGE = 'scrapy.extensions.httpcache.FilesystemCacheStorage'
 
-FEED_URI = "file:///tmp/items.json"
+FEED_URI = "s3://insee-brut/scraped_items.%s.json" % datetime.datetime.now().strftime("%Y_%m_%d_%HH%M")
 FEED_FORMAT = "json"
 FEED_EXPORT_INDENT = 2
 FEED_EXPORT_ENCODING = "utf-8"

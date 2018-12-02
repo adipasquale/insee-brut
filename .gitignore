@@ -1,4 +1,6 @@
 scrapy-project/*.json
+scrapy-project/build
+scrapy-project/project.egg-info/
 .vscode
 *.pyc
 *.DS_Store
