@@ -34,7 +34,7 @@ class ItemsLoader:
         s3 = boto3.resource('s3')
         try:
             bucket = s3.Bucket(os.getenv("AWS_S3_BUCKET_NAME"))
-            bucket.download_file(os.getenv("AWS_S3_NAME"), 'tmp/items.json')
+            bucket.download_file(os.getenv("AWS_S3_FILE_NAME"), 'tmp/items.json')
         except botocore.exceptions.ClientError as e:
             if e.response['Error']['Code'] == "404":
                 print("The object does not exist.")
