@@ -112,4 +112,6 @@ class InseeSpider(scrapy.Spider):
                 elif "tableaux" in txt:
                     item["tableaux_data_url"] = url
 
+        item["contenu_html"] = response.css("#consulter").extract_first()
+
         yield(item)

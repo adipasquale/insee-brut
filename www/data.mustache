@@ -5,6 +5,7 @@
   <meta charset="utf-8" />
   <title>INSEE Brut</title>
   <link href='/tachyons-4.11.1.css' rel='stylesheet' type='text/css'>
+  <link href='/insee.css' rel='stylesheet' type='text/css'>
   <meta name="viewport" content="width=device-width, initial-scale=1">
 </head>
 
@@ -83,8 +84,14 @@
           <a class="f6 link dim br1 ph3 pv2 mb2 dib white bg-purple" href="{{tableaux_data_url}}">
             Télécharger les données des tableaux (XLS)
           </a>
-        </p>
+        </div>
       {{/tableaux_data_url}}
+
+      {{#contenu_html}}
+        <div class="bg-near-white mt3 pv3 contenu contenu_html">
+          {{{contenu_html}}}
+        </div>
+      {{/contenu_html}}
 
     </article>
   {{/item}}

@@ -13,11 +13,15 @@ if __name__ == '__main__':
 
     server = Server()
     server.watch(
-    '*.mustache',
-    shell('python3 build.py %s' % build_args, cwd='scripts')
+        '*.mustache',
+        shell('python3 build.py %s' % build_args, cwd='scripts')
     )
     server.watch(
-    'scripts/build.py',
-    shell('python3 build.py %s' % build_args, cwd='scripts')
+        'scripts/*.py',
+        shell('python3 build.py %s' % build_args, cwd='scripts')
+    )
+    server.watch(
+        'tmp/items.json',
+        shell('python3 build.py %s' % build_args, cwd='scripts')
     )
     server.serve(root='./build/')

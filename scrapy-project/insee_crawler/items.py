@@ -31,4 +31,6 @@ class Statistiques(scrapy.Item):
     collection_id = scrapy.Field()
     collection_url = scrapy.Field()
 
+    contenu_html = scrapy.Field()
+
     pass

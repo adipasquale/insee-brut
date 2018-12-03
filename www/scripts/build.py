@@ -1,6 +1,7 @@
 from dotenv import load_dotenv
 import os
 import argparse
+import re
 from datetime import datetime
 from distutils.dir_util import copy_tree
 from data_page_builder import DataPageBuilder
@@ -22,6 +23,7 @@ def augment_items(items):
     for item in items:
         item["date_diffusion_lisible"] = datetime.utcfromtimestamp(int(item["date_diffusion"]/1000)).strftime('%d/%m/%Y')
         item["path"] = DataPageBuilder.path_for_data_page(item)
+        item["contenu_html"] = re.subn(r"src=\"\/", "src=\"https://insee.fr/", item["contenu_html"])[0]
     return items
 
 def copy_static_assets():
@@ -50,6 +52,7 @@ if __name__ == '__main__':
         item = next((i for i in items if i["insee_id"] == args.only_data_id))
         DataPageBuilder(item).build()
         print("rebuilt single data page %s" % item["insee_id"])
+        copy_static_assets()
     else:
         AllListPagesBuilder(items).build()
         AllDataPagesBuilder(items).build()
