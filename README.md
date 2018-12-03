@@ -8,7 +8,27 @@ The Scrapy spider will run nightly on [ScrapingHub](https://scrapinghub.com/). I
 
 Then, a python build script will recompile Mustache templates using the scraped data and publish it. This will run on [Netlify](https://www.netlify.com/).
 
-## Deploy Scrapy spider to Scrapinghub
+## Scraping
+
+## testing INSEE solr API
+
+The INSEE search page uses an AJAX call to un unprotected JSON API that gives us a lot of details.
+
+You can test it in your browser with :
+
+```
+curl 'https://insee.fr/fr/solr/consultation?q=*:*' \
+-H 'Accept: application/json, text/javascript, */*; q=0.01' \
+-H 'Content-Type: application/json; charset=utf-8' \
+--data '{"q":"*:*","start":0,"sortFields":[{"field":"dateDiffusion","order":"desc"}],"filters":[{"field":"rubrique","tag":"tagRubrique","values":["statistiques"]},{"field":"diffusion","values":[true]}],"rows":100,"facetsQuery":[]}' \
+| jq '.documents[] .titre'
+```
+
+It's possible to add a filter with an ID : `{"field":"id","values":[3648291]}`
+
+I'm using [jq](https://stedolan.github.io/jq/) here for parsing the results inline.
+
+### Deploy Scrapy spider to Scrapinghub
 
 The first time, you need the shub dependency
 

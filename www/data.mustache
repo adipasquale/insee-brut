@@ -19,31 +19,76 @@
   </div>
 </nav>
 
-{{#item}}
-  <article class="center mw5 mw6-ns br3 hidden ba b--black-10 mv4">
-    <h1 class="f4 bg-near-white br3 br--top black-90 mv0 pv2 ph3">{{titre}}</h1>
-    <div class="pa3 bt b--black-10">
+<div class="ph3">
+  {{#item}}
+    <article class="center mw7 mv4">
 
-      <div class="fr">
+      <div class="fr mv3">
         <span class="dib ba pa1 b--purple bg-purple white br-pill">
           {{insee_type}}
         </span>
-
-        <span class="dib ba pa1 br-pill">
-          {{libelle_geographique}}
-        </span>
       </div>
+
+      <h1>{{titre}}</h1>
 
       <p class="i">
         publié le {{date_diffusion_lisible}}
       </p>
 
-      <p class="f6 f5-ns lh-copy measure">
-        {{sous_titre}}
-      </p>
-    </div>
-  </article>
-{{/item}}
+      <div>
+        Collection :
+        <span class="dib ba pa1 br-pill">
+          {{collection}}
+        </span>
+      </div>
+
+      <div>
+        Libellé Géographique :
+        <span class="dib ba pa1 br-pill">
+          {{libelle_geographique}}
+        </span>
+      </div>
+
+      <div>
+        Numéro {{numero}}
+      </div>
+
+      <div>
+        Auteur·e·s: {{auteur}}
+      </div>
+
+      {{#sous_titre}}
+        <p class="f6 f5-ns lh-copy measure">
+          {{sous_titre}}
+        </p>
+      {{/sous_titre}}
+
+      {{#chapo}}
+        <p class="f6 f5-ns lh-copy measure">
+          <h3>Chapeau</h3>
+          {{chapo}}
+        </p>
+      {{/chapo}}
+
+      {{#pdf_url}}
+        <div>
+          <a class="f6 link dim br1 ph3 pv2 mb2 dib white bg-purple" href="{{pdf_url}}">
+            Télécharger la version imprimable (PDF)
+          </a>
+        </p>
+      {{/pdf_url}}
+
+      {{#tableaux_data_url}}
+        <div>
+          <a class="f6 link dim br1 ph3 pv2 mb2 dib white bg-purple" href="{{tableaux_data_url}}">
+            Télécharger les données des tableaux (XLS)
+          </a>
+        </p>
+      {{/tableaux_data_url}}
+
+    </article>
+  {{/item}}
+</div>
 
 </body>
 

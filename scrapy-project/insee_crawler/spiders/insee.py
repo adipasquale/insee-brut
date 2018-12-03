@@ -10,7 +10,12 @@ from insee_crawler.items import Statistiques
 class InseeSpider(scrapy.Spider):
     name = 'insee'
     allowed_domains = ['insee.fr']
-    current_offset = 0
+    current_page = None
+
+    def __init__(self, pages_limit=None, only_id=None, *args, **kwargs):
+        self.pages_limit = int(pages_limit) if pages_limit is not None else None
+        self.only_id = only_id
+        super(InseeSpider, self).__init__(*args, **kwargs)
 
     def start_requests(self):
         return [
@@ -18,14 +23,37 @@ class InseeSpider(scrapy.Spider):
         ]
 
     def next_page_request(self):
-        if self.current_offset is None:
-            self.current_offset = 0
+        if self.current_page is None:
+            self.current_page = 0
         else:
-            self.current_offset += 100
+            self.current_page += 1
+
+        if self.only_id and self.current_page > 0:
+            # do not even try to crawl second page
+            return None
+
+        if self.pages_limit is not None and self.current_page >= self.pages_limit:
+            return None
+
+        query = {
+            "q":"*:*",
+            "start": self.current_page * 100,
+            "sortFields": [
+                {"field":"dateDiffusion","order":"desc"}
+            ],
+            "filters": [
+                {"field": "rubrique", "tag": "tagRubrique", "values": ["statistiques"]},
+                {"field": "diffusion", "values": [True]}
+            ],
+            "rows": 100,
+            "facetsQuery":[]
+        }
+        if self.only_id:
+            query["filters"].append({"field": "id", "values": [self.only_id]})
         return scrapy.Request(
             "https://insee.fr/fr/solr/consultation?q=*:*",
             method="POST",
-            body="""{"q":"*:*","start":%s,"sortFields":[{"field":"dateDiffusion","order":"desc"}],"filters":[{"field":"rubrique","tag":"tagRubrique","values":["statistiques"]},{"field":"diffusion","values":[true]}],"rows":100,"facetsQuery":[]}""" % self.current_offset,
+            body=json.dumps(query),
             headers={
                 'Accept': 'application/json, text/javascript, */*; q=0.01',
                 'Content-Type': 'application/json; charset=utf-8'
