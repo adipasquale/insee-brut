@@ -64,9 +64,9 @@ ROBOTSTXT_OBEY = True
 
 # Configure item pipelines
 # See https://doc.scrapy.org/en/latest/topics/item-pipeline.html
-#ITEM_PIPELINES = {
-#    'insee_crawler.pipelines.InseeCrawlerPipeline': 300,
-#}
+ITEM_PIPELINES = {
+   'insee_crawler.pipelines.MongoPipeline': 300,
+}
 
 # Enable and configure the AutoThrottle extension (disabled by default)
 # See https://doc.scrapy.org/en/latest/topics/autothrottle.html
@@ -88,8 +88,3 @@ ROBOTSTXT_OBEY = True
 #HTTPCACHE_DIR = 'httpcache'
 #HTTPCACHE_IGNORE_HTTP_CODES = []
 #HTTPCACHE_STORAGE = 'scrapy.extensions.httpcache.FilesystemCacheStorage'
-
-FEED_URI = "s3://insee-brut/scraped_items.json"
-FEED_FORMAT = "json"
-FEED_EXPORT_INDENT = 2
-FEED_EXPORT_ENCODING = "utf-8"

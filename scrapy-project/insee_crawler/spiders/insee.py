@@ -4,16 +4,16 @@ import logging
 import re
 import json
 import urllib
-from insee_crawler.items import Statistiques
-
+from insee_crawler.items import StatistiquesLoader, Statistiques, SerieLoader, Serie
 
 class InseeSpider(scrapy.Spider):
     name = 'insee'
     allowed_domains = ['insee.fr']
     current_page = None
 
-    def __init__(self, pages_limit=None, only_id=None, *args, **kwargs):
+    def __init__(self, pages_limit=None, only_id=None, skip_contenu=False, *args, **kwargs):
         self.pages_limit = int(pages_limit) if pages_limit is not None else None
+        self.skip_contenu = skip_contenu
         self.only_id = only_id
         super(InseeSpider, self).__init__(*args, **kwargs)
 
@@ -61,33 +61,68 @@ class InseeSpider(scrapy.Spider):
             callback=self.parse_search_results
         )
 
+    def series_request(self, insee_id, page=1):
+        query = {
+            "q": "*:*",
+            "start": (page - 1) * 100,
+            "rows": 100,
+            "facetsField":[],
+            "filters": [
+                {"field":"bdm_idFamille","values":["%s" % insee_id]}
+            ],
+            "sortFields": [
+                {"field": "dateDiffusion", "order": "desc"},
+                {"field": "bdm_idbankSerie", "order": "asc"}
+            ]
+        }
+        request = scrapy.Request(
+            "https://insee.fr/fr/statistiques/series/ajax/consultation",
+            method="POST",
+            body=json.dumps(query),
+            headers={
+                'Accept': 'application/json, text/javascript, */*; q=0.01',
+                'Content-Type': 'application/json; charset=utf-8'
+            },
+            callback=self.parse_series_results
+        )
+        request.meta["insee_id"] = insee_id
+        request.meta["page"] = page
+        return request
+
+    def parse_series_results(self, response):
+        json_response = json.loads(response.text)
+        for document in json_response["documents"]:
+            loader = SerieLoader(Serie())
+            loader.add_value(None, document)
+            serie = loader.load_item()
+            yield(serie)
+        if len(json_response["documents"]) == 100:
+            yield(self.series_request(
+                response.meta["insee_id"],
+                page=response.meta["page"] + 1)
+            )
+
     def parse_search_results(self, response):
         res = json.loads(response.text)
         for document in res["documents"]:
+            loader = StatistiquesLoader(Statistiques())
+            loader.add_value(None, document)
+            loader.add_value("custom", {})
+            item = loader.load_item()
             if document.get("type") == "statistiques":
-                item = Statistiques(
-                    insee_id = document["id"],
-                    titre = document["titre"],
-                    code = document.get("code"),
-                    insee_type = document["type"],
-                    categorie_id = document.get("categorie", {}).get("id"),
-                    categorie_libelle = document.get("categorie", {}).get("libelleFr"),
-                    type_produit = document.get("typeProduit"),
-                    sous_titre = document["sousTitre"],
-                    # auteur = document["auteur"],
-                    chapo = document["chapo"],
-                    numero = document["numero"],
-                    collection = document["collection"],
-                    date_diffusion = document["dateDiffusion"],
-                    libelle_geographique = document["libelleGeographique"]
-                )
-                item["url"] = "https://insee.fr/fr/statistiques/%s" % item["insee_id"]
+                item["custom"]["insee_url"] = "https://insee.fr/fr/statistiques/%s" % item["id"]
                 request = scrapy.Request(
-                    item["url"],
+                    item["custom"]["insee_url"],
                     callback=self.parse_statistiques
                 )
                 request.meta["item"] = item
                 yield(request)
+            elif item.get("categorie", {}).get("libelleFr") == "Séries chronologiques":
+                item["custom"]["insee_url"] = "https://insee.fr/fr/statistiques/series/%s" % item["id"]
+                yield(self.series_request(item["id"]))
+                yield(item)
+            else:
+                yield(item)
         if len(res["documents"]):
             yield(self.next_page_request())
 
@@ -112,6 +147,7 @@ class InseeSpider(scrapy.Spider):
                 elif "tableaux" in txt:
                     item["tableaux_data_url"] = url
 
-        item["contenu_html"] = response.css("#consulter").extract_first()
+        if not self.skip_contenu:
+            item["contenu_html"] = response.css("#consulter").extract_first()
 
         yield(item)

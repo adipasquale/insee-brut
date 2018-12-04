@@ -28,6 +28,19 @@ It's possible to add a filter with an ID : `{"field":"id","values":[3648291]}`
 
 I'm using [jq](https://stedolan.github.io/jq/) here for parsing the results inline.
 
+There is a second API endpoint for 'series' types of data :
+
+```
+curl 'https://insee.fr/fr/statistiques/series/ajax/consultation' \
+-H 'Accept-Language: fr,fr-FR;q=0.8,en-US;q=0.5,en;q=0.3' --compressed \
+-H 'content-type: application/json; charset=utf-8' \
+--data '{"q":"*:*","start":0,"rows":10,"facetsField":[],"filters":[{"field":"bdm_idFamille","values":["103212792"]}],"sortFields":[{"field":"dateDiffusion","order":"desc"},{"field":"bdm_idbankSerie","order":"asc"}]}' \
+| jq '.documents | .idBank'
+```
+
+you can also perform tests with the small bash script in `/scrapy-project/scripts/test_insee_api.sh`
+
+
 ### Deploy Scrapy spider to Scrapinghub
 
 The first time, you need the shub dependency
