@@ -23,7 +23,8 @@ def augment_items(items):
     for item in items:
         item["date_diffusion_lisible"] = datetime.utcfromtimestamp(int(item["date_diffusion"]/1000)).strftime('%d/%m/%Y')
         item["path"] = DataPageBuilder.path_for_data_page(item)
-        item["contenu_html"] = re.subn(r"src=\"\/", "src=\"https://insee.fr/", item["contenu_html"])[0]
+        if item.get("contenu_html"):
+            item["contenu_html"] = re.subn(r"src=\"\/", "src=\"https://insee.fr/", item["contenu_html"])[0]
     return items
 
 def copy_static_assets():
