@@ -7,3 +7,4 @@ scrapy-project/project.egg-info/
 .env
 www/build
 tmp
+__pycache__
