@@ -15,5 +15,5 @@ class AllListPagesBuilder:
       for page_num in range(1, last_page_num + 1):
         start = (page_num - 1) * self.ITEMS_PER_PAGE
         page_items = self.items[start:start + self.ITEMS_PER_PAGE]
-        ListPageBuilder(page_num, page_items, last_page_num, renderer=self.renderer)
+        ListPageBuilder(page_num, page_items, last_page_num, renderer=self.renderer).build()
       print("finished rebuilding %s list pages." % last_page_num)
