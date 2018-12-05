@@ -6,12 +6,12 @@ insee.pw {
         hook /github_hook [secret]
     }
     gzip
+    proxy /admin localhost:8000 {
+        transparent
+    }
     redir 301 {
         if {scheme} is http
         /  https://{host}{uri}
     }
     log /var/log/access.log
-    proxy /admin localhost:8000 {
-        transparent
-    }
 }

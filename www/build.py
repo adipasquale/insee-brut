@@ -9,13 +9,13 @@ from list_page_builder import ListPageBuilder
 from all_list_pages_builder import AllListPagesBuilder
 from all_data_pages_builder import AllDataPagesBuilder
 from items_loader import ItemsLoader
-from settings import BUILD_PATH
+from settings import TMP_PATH, BUILD_PATH
 
 load_dotenv()
 DIRNAME = os.path.dirname(__file__)
 
 def create_tmp_directories():
-    for dir_path in [BUILD_PATH, os.path.join(BUILD_PATH, "data")]:
+    for dir_path in [TMP_PATH, BUILD_PATH, os.path.join(BUILD_PATH, "data")]:
         if not os.path.exists(dir_path):
             os.makedirs(dir_path)
 
