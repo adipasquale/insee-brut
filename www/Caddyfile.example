@@ -11,4 +11,7 @@ insee.pw {
         /  https://{host}{uri}
     }
     log /var/log/access.log
+    proxy /admin localhost:8000 {
+        transparent
+    }
 }
