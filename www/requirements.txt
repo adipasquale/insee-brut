@@ -1,0 +1,2 @@
+python-dotenv==0.9.1
+pystache==0.5.4

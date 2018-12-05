@@ -6,7 +6,7 @@ Mirror site for INSEE data aimed to be exhaustive, faster and easier to browse.
 
 The Scrapy spider will run nightly on [ScrapingHub](https://scrapinghub.com/). It should fetch all data from the insee.fr website.
 
-Then, a python build script will recompile Mustache templates using the scraped data and publish it. This will run on [Netlify](https://www.netlify.com/).
+Then, a python build script will recompile Mustache templates using the scraped data and publish it. This will run on AWS Lambda and store the HTML and CSS files on S3.
 
 ## Scraping
 

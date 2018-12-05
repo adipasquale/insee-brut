@@ -3,8 +3,6 @@ import pystache
 import math
 from list_page_builder import ListPageBuilder
 
-DIRNAME = os.path.dirname(__file__)
-
 class AllListPagesBuilder:
     ITEMS_PER_PAGE = 50
 

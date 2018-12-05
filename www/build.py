@@ -9,15 +9,15 @@ from list_page_builder import ListPageBuilder
 from all_list_pages_builder import AllListPagesBuilder
 from all_data_pages_builder import AllDataPagesBuilder
 from items_loader import ItemsLoader
+from settings import BUILD_PATH
 
 load_dotenv()
 DIRNAME = os.path.dirname(__file__)
 
 def create_tmp_directories():
-    for dir_name in ["build", "build/data"]:
-        path = os.path.join(DIRNAME, '..', dir_name)
-        if not os.path.exists(path):
-            os.makedirs(path)
+    for dir_path in [BUILD_PATH, os.path.join(BUILD_PATH, "data")]:
+        if not os.path.exists(dir_path):
+            os.makedirs(dir_path)
 
 def augment_items(items):
     for item in items:
@@ -29,8 +29,8 @@ def augment_items(items):
 
 def copy_static_assets():
     copy_tree(
-        os.path.join(DIRNAME, "..", "static_assets"),
-        os.path.join(DIRNAME, "..", "build")
+        os.path.join(DIRNAME, "static_assets"),
+        os.path.join(BUILD_PATH)
     )
 
 if __name__ == '__main__':
@@ -59,3 +59,13 @@ if __name__ == '__main__':
         AllDataPagesBuilder(items).build()
         print("finished rebuilding %s data pages finished." % len(items))
         copy_static_assets()
+
+def rebuild_all():
+    create_tmp_directories()
+    items_loader = ItemsLoader()
+    items = items_loader.load_from_s3()
+    items = augment_items(items)
+    AllListPagesBuilder(items).build()
+    AllDataPagesBuilder(items).build()
+    print("finished rebuilding %s data pages finished." % len(items))
+    copy_static_assets()

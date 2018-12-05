@@ -1,5 +1,6 @@
 import os
 import pystache
+from settings import BUILD_PATH
 
 DIRNAME = os.path.dirname(__file__)
 
@@ -25,7 +26,7 @@ class ListPageBuilder:
         self.page_num = page_num
         self.items = items
         self.last_page_num = last_page_num
-        self.template_path = os.path.join(DIRNAME, '..', 'list.mustache')
+        self.template_path = os.path.join(DIRNAME, 'templates', 'list.mustache')
         self.renderer = renderer if renderer is not None else pystache.Renderer()
         self.filename = ListPageBuilder.filename_for_list_page_num(self.page_num)
 
@@ -50,7 +51,7 @@ class ListPageBuilder:
                 "first_page": first_page if self.page_num > 6 else None
             }
         )
-        rendered_path = os.path.join(DIRNAME, '..', 'build', self.filename)
+        rendered_path = os.path.join(BUILD_PATH, self.filename)
         file = open(rendered_path, 'w')
         file.write(rendered_html)
         file.close()

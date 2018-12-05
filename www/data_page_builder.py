@@ -1,5 +1,6 @@
 import os
 import pystache
+from settings import BUILD_PATH
 
 DIRNAME = os.path.dirname(__file__)
 
@@ -15,7 +16,7 @@ class DataPageBuilder():
 
     def __init__(self, item, renderer=None):
         self.item = item
-        self.template_path = os.path.join(DIRNAME, '..', 'data.mustache')
+        self.template_path = os.path.join(DIRNAME, 'templates', 'data.mustache')
         self.renderer = renderer if renderer is not None else pystache.Renderer()
 
     def build(self):
@@ -25,7 +26,7 @@ class DataPageBuilder():
             }
         )
         rendered_path = os.path.join(
-            DIRNAME, '..', 'build',
+            BUILD_PATH,
             DataPageBuilder.path_for_data_page(self.item)
         )
         file = open(rendered_path, 'w')
