@@ -8,7 +8,7 @@ class DataPageBuilder():
 
     @staticmethod
     def filename_for_data_page(item):
-        return "%s.html" % item["insee_id"]
+        return "%s.html" % item["id"]
 
     @staticmethod
     def path_for_data_page(item):

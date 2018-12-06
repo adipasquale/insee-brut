@@ -29,13 +29,22 @@
     <div class="pa3 bt b--black-10">
 
       <div class="fr">
-        <span class="dib ba pa1 b--purple bg-purple white br-pill">
-          {{insee_type}}
-        </span>
+        {{#custom}}
+          <div class="tr">
+            <span class="dib ba pa1 b--{{categorieCouleur}} bg-{{categorieCouleur}} white br-pill">
+              {{categorie}}
+            </span>
+          </div>
+        {{/custom}}
 
-        <span class="dib ba pa1 br-pill">
-          {{libelle_geographique}}
-        </span>
+        {{#libelleGeographique}}
+          <div class="mt1 tr">
+            <span class="dib ba pa1 br-pill">
+              {{libelleGeographique}}
+            </span>
+          </div>
+        {{/libelleGeographique}}
+
       </div>
 
       <p class="i">

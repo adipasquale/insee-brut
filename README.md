@@ -71,3 +71,23 @@ To start a crawl :
 cd scrapy-project
 scrapy crawl insee
 ```
+
+## Misc
+
+### Useful mongo queries for exploration
+
+find the Series with the most Serie in it
+
+```
+db.insee_items.aggregate([
+  {$match:{_type:"Serie"}},
+  {$group: { _id: "$familleBdm.id", count: {$sum:1}}},
+  {$sort: {count: -1}}
+])
+```
+
+investigate the sorting order key :
+
+```
+db.insee_items.find({"_type": "Statistiques"}, {_id:0, famille: 0, contenu_html: 0, custom: 0, themes:0, etat:0}).limit(5).sort({dateDiffusion: -1}).pretty()
+```
