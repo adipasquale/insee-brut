@@ -17,7 +17,10 @@ class RootItemsAugmenter:
             categorie = ""
             categorie_color = ""
             if item.get("collection") and (re.match(r'^Insee ', item["collection"]) or item["collection"] == "Informations rapides"):
-                categorie = "%s - N°%s" % (item["collection"], item["numero"])
+                if item.get("numero"):
+                    categorie = "%s - N°%s" % (item["collection"], item["numero"])
+                else:
+                    categorie = item["collection"]
                 categorie_color = "orange"
             elif item.get("famille"):
                 if item["famille"].get("libelleFr") == "Outils interactifs":
