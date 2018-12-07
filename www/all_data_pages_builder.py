@@ -1,6 +1,4 @@
-import os
 import pystache
-import math
 from data_page_builder import DataPageBuilder
 
 class AllDataPagesBuilder:
