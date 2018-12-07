@@ -22,9 +22,15 @@ if __name__ == '__main__':
     def rebuild_md():
         print(subprocess.call(cmd_md))
 
+    cmd_lists = cmd.copy()
+    cmd_lists += ["--only-list-pages"]
+    def rebuild_lists():
+        print(subprocess.call(cmd_lists))
+
     server = Server()
     server.watch('templates/data.mustache', rebuild_all)
-    server.watch('templates/list.mustache', rebuild_all)
+    server.watch('templates/list.mustache', rebuild_lists)
+    server.watch('templates/_*.mustache', rebuild_lists)
     server.watch('templates/markdown_page.mustache', rebuild_md)
     server.watch('markdown_pages/*.md', rebuild_md)
     server.watch('*.py', rebuild_all)
