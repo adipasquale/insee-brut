@@ -1,9 +1,11 @@
-from build import rebuild_all
+from build import build
 from bottle import route, run, template
+from settings import BOTTLE_DEBUG
+
 
 @route('/admin/rebuild')
 def rebuild():
-    rebuild_all()
+    build()
     return 'Rebuilt done !'
 
-run(host='localhost', port=8000, debug=True)
+run(host='localhost', port=8000, debug=BOTTLE_DEBUG)
