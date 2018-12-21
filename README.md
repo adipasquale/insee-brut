@@ -4,13 +4,35 @@ Mirror site for INSEE data aimed to be exhaustive, faster and easier to browse.
 
 ## Overall architecture
 
+The project is splitted into 3 parts :
+
+- 1 - [Scraper](#scraper)
+- 2 - [API](#api)
+- 3 - [Website](#website)
+
 The Scrapy spider will run nightly on [ScrapingHub](https://scrapinghub.com/). It should fetch all data from the insee.fr website.
 
 Then, a python build script will recompile Mustache templates using the scraped data and publish it. This will run on AWS Lambda and store the HTML and CSS files on S3.
 
-## Scraping
+## Scraper
 
-## testing INSEE solr API
+### Local setup
+
+```
+mkvirtualenv insee-brut
+workon insee-brut
+pip3 install -r requirements.txt -r requirements-dev.txt
+```
+
+To start a crawl :
+
+```
+cd scrapy-project
+scrapy crawl insee
+```
+
+
+### testing INSEE solr API
 
 The INSEE search page uses an AJAX call to un unprotected JSON API that gives us a lot of details.
 
@@ -57,20 +79,34 @@ cd scrapy-project
 shub deploy 362041
 ```
 
-## Local setup
+## API
+
+The api is a Rails API project. It doesn't use ActiveRecord but Mongoid instead.
+
+### Local setup for the API
+
+```sh
+cd `api`
+gem install bundler && bundle install
+```
+
+Optionally work on a split RVM gemset to make sure your dependencies are well isolated.
+
+### Locally serve the API
 
 ```
-mkvirtualenv insee-brut
-workon insee-brut
-pip3 install -r requirements.txt -r requirements-dev.txt
+overmind start -f Procfile
 ```
 
-To start a crawl :
+### Deploy the API
 
-```
-cd scrapy-project
-scrapy crawl insee
-```
+TODO
+
+## Website
+
+Currently the app is a fully statically built website. It's done using custom python scripts. It uses the Mustache templating language via the `pystache` lib.
+
+We discussed switching to a React app that hits the API instead, to reach a more app-like site.
 
 ## Misc
 
@@ -80,7 +116,7 @@ find the Series with the most Serie in it
 
 ```
 db.insee_items.aggregate([
-  {$match:{_type:"Serie"}},
+  {$match:{_scrapy_item_class:"Serie"}},
   {$group: { _id: "$familleBdm.id", count: {$sum:1}}},
   {$sort: {count: -1}}
 ])
@@ -89,5 +125,5 @@ db.insee_items.aggregate([
 investigate the sorting order key :
 
 ```
-db.insee_items.find({"_type": "Statistiques"}, {_id:0, famille: 0, contenu_html: 0, custom: 0, themes:0, etat:0}).limit(5).sort({dateDiffusion: -1}).pretty()
+db.insee_items.find({"_scrapy_item_class": "Statistiques"}, {_id:0, famille: 0, contenu_html: 0, custom: 0, themes:0, etat:0}).limit(5).sort({dateDiffusion: -1}).pretty()
 ```

@@ -8,3 +8,12 @@ scrapy-project/project.egg-info/
 www/build
 tmp
 __pycache__
+
+api/.bundle
+api/log/*
+api/tmp/*
+!api/log/.keep
+!api/tmp/.keep
+api/.byebug_history
+api/config/master.key
+api/.ruby-gemset

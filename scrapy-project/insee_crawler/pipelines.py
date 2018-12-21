@@ -30,7 +30,7 @@ class MongoPipeline(object):
         self.client.close()
 
     def process_item(self, item, spider):
-        item["_type"] = item.__class__.__name__
+        item["_scrapy_item_class"] = item.__class__.__name__
         self.db[self.collection_name].find_one_and_update(
             {"id": item["id"]},
             {"$set": dict(item)},
