@@ -49,7 +49,7 @@ class InseeSpider(scrapy.Spider):
             "facetsQuery":[]
         }
         if self.only_id:
-            query["filters"].append({"field": "id", "values": [self.only_id]})
+            query["filters"].append({"field": "id_insee", "values": [self.only_id]})
         return scrapy.Request(
             "https://insee.fr/fr/solr/consultation?q=*:*",
             method="POST",
@@ -92,6 +92,7 @@ class InseeSpider(scrapy.Spider):
     def parse_series_results(self, response):
         json_response = json.loads(response.text)
         for document in json_response["documents"]:
+            document["id_insee"] = document.pop("id")
             loader = SerieLoader(Serie())
             loader.add_value(None, document)
             serie = loader.load_item()
@@ -106,11 +107,12 @@ class InseeSpider(scrapy.Spider):
         res = json.loads(response.text)
         for document in res["documents"]:
             loader = StatistiquesLoader(Statistiques())
+            document["id_insee"] = document.pop("id")
             loader.add_value(None, document)
             loader.add_value("custom", {})
             item = loader.load_item()
             if document.get("type") == "statistiques":
-                item["custom"]["insee_url"] = "https://insee.fr/fr/statistiques/%s" % item["id"]
+                item["custom"]["insee_url"] = "https://insee.fr/fr/statistiques/%s" % item["id_insee"]
                 request = scrapy.Request(
                     item["custom"]["insee_url"],
                     callback=self.parse_statistiques
@@ -118,8 +120,8 @@ class InseeSpider(scrapy.Spider):
                 request.meta["item"] = item
                 yield(request)
             elif item.get("categorie", {}).get("libelleFr") == "Séries chronologiques":
-                item["custom"]["insee_url"] = "https://insee.fr/fr/statistiques/series/%s" % item["id"]
-                yield(self.series_request(item["id"]))
+                item["custom"]["insee_url"] = "https://insee.fr/fr/statistiques/series/%s" % item["id_insee"]
+                yield(self.series_request(item["id_insee"]))
                 yield(item)
             else:
                 yield(item)

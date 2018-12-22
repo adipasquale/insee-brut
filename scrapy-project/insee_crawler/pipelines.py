@@ -32,7 +32,7 @@ class MongoPipeline(object):
     def process_item(self, item, spider):
         item["_scrapy_item_class"] = item.__class__.__name__
         self.db[self.collection_name].find_one_and_update(
-            {"id": item["id"]},
+            {"id_insee": item["id_insee"]},
             {"$set": dict(item)},
             upsert=True
         )

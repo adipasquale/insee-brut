@@ -83,6 +83,21 @@ shub deploy 362041
 
 The api is a Rails API project. It doesn't use ActiveRecord but Mongoid instead.
 
+### API Routes
+
+All routes return JSON only. No authentication required yet.
+
+`GET /api/v1/insee_documents` : lists documents.
+
+Accepted parameters :
+- `page` : the requested page number. should be a positive integer. defaults to 1.
+- `count` : the number of items to return per page. should be a positive integer. defaults to 50.
+- `include_html` : considered true if contains "1" or "true". By default the documents won't contain the HTML in the contenu_html key, to avoid too slow/heavy answers.
+
+`GET /api/v1/insee_documents/:id` : fetches a single document. The id in the route is the INSEE ID, not the MongoDB ObjectId.
+
+No accepted parameters yet
+
 ### Local setup for the API
 
 ```sh
@@ -95,7 +110,7 @@ Optionally work on a split RVM gemset to make sure your dependencies are well is
 ### Locally serve the API
 
 ```
-overmind start -f Procfile
+rails s
 ```
 
 ### Deploy the API
@@ -109,6 +124,20 @@ Currently the app is a fully statically built website. It's done using custom py
 We discussed switching to a React app that hits the API instead, to reach a more app-like site.
 
 ## Misc
+
+### Dump prod DB locally
+
+```
+mongodump --uri=mongodb://USER:PASSWORD@68.183.79.212/insee_brut
+mongorestore --drop -d insee_brut dump/insee_brut
+```
+
+### Create mongo indexes
+
+```
+db.insee_items.createIndex({_scrapy_item_class: 1, dateDiffusion: -1});
+db.insee_items.createIndex({id_insee: 1});
+```
 
 ### Useful mongo queries for exploration
 
