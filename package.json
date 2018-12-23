@@ -1,0 +1,20 @@
+{
+  "name": "insee-brut",
+  "version": "1.0.0",
+  "description": "Mirror site for INSEE data aimed to be exhaustive, faster and easier to browse.",
+  "main": "index.js",
+  "scripts": {
+    "start": "node your-script.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/adipasquale/insee-brut.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/adipasquale/insee-brut/issues"
+  },
+  "homepage": "https://github.com/adipasquale/insee-brut#readme"
+}
