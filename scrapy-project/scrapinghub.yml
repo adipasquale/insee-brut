@@ -4,4 +4,4 @@ stacks:
   default: scrapy:1.4-py3
 
 requirements:
-  file: requirements.txt
+  file: requirements-scrapinghub.txt

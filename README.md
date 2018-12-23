@@ -6,7 +6,8 @@ The project is splitted into 3 parts :
 
 - 1 - [Scraper](#scraper)
 - 2 - [API](#api)
-- 3 - [Website](#website)
+- 3 - [Static Website [Deprecated]](#static-website-deprecated)
+- 4 - [React Website](#react-website)
 
 ![Project Architecture](https://www.lucidchart.com/publicSegments/view/0b054d24-4603-4817-b972-1004a0a539ad/image.png)
 
@@ -21,15 +22,15 @@ It scraps incrementally all the data, meaning it won't go through all pages ever
 ### Local setup
 
 ```
+cd scrapy-project
 mkvirtualenv insee-brut
 workon insee-brut
-pip3 install -r requirements.txt -r requirements-dev.txt
+pip3 install -r requirements.txt
 ```
 
 To start a crawl :
 
 ```
-cd scrapy-project
 scrapy crawl insee
 ```
 
@@ -96,9 +97,11 @@ You can deploy new version of the apps using this command :
 git subtree push --prefix api production master
 ```
 
-## 3. Website
+## 3. Static Website [Deprecated]
 
 Currently the app is a fully statically built website. It's done using custom python scripts. It uses the Mustache templating language via the `pystache` lib.
+
+## 4. React Website
 
 We are switching to a React app that hits the API instead, to reach a more app-like site.
 
