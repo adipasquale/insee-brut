@@ -53,6 +53,8 @@ shub deploy 362041
 
 The api is a Rails API project. It doesn't use ActiveRecord but Mongoid instead.
 
+The production version is accessible at [api.insee.pw](http://api.insee.pw/)
+
 ### API Routes
 
 All routes return JSON only. No authentication required yet.
@@ -85,7 +87,14 @@ rails s
 
 ### Deploy the API
 
-TODO
+The API is hosted on the Digital Ocean droplet.
+This droplet uses [dokku](http://dokku.viewdocs.io/dokku/) to host different apps, and provide Heroku-like ease-of-use.
+
+You can deploy new version of the apps using this command :
+
+```sh
+git subtree push --prefix api production master
+```
 
 ## 3. Website
 
