@@ -152,6 +152,15 @@ development:
 
     # Use background indexes by default if `background` option not specified. (default: false)
     # background_indexing: false
+production:
+  clients:
+    default:
+      database: <%= ENV.fetch("MONGODB_DB_NAME", "insee_brut") %>
+      hosts:
+        - <%= ENV.fetch("MONGODB_HOST", "localhost:27017") %>
+      options:
+        user: <%= ENV.fetch("MONGODB_USERNAME") %>
+        password: <%= ENV.fetch("MONGODB_PASSWORD") %>
 test:
   clients:
     default:
