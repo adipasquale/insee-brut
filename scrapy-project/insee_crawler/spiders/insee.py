@@ -5,17 +5,42 @@ import re
 import json
 import urllib
 from insee_crawler.items import RootDocumentLoader, RootDocument, SerieLoader, Serie
+from insee_crawler.mongo_provider import MongoProvider
+
 
 class InseeSpider(scrapy.Spider):
     name = 'insee'
     allowed_domains = ['insee.fr']
     current_page = None
 
-    def __init__(self, pages_limit=None, only_id=None, skip_contenu=False, *args, **kwargs):
+    @classmethod
+    def from_crawler(cls, crawler, *args, **kwargs):
+        kwargs['mongo_uri'] = crawler.settings.get("MONGO_URI")
+        kwargs['mongo_database'] = crawler.settings.get('MONGO_DATABASE')
+        return super(InseeSpider, cls).from_crawler(crawler, *args, **kwargs)
+
+    def __init__(
+        self, pages_limit=None, only_id=None, skip_contenu=False,
+        only_root_documents=False, force_rescrape=False,
+        mongo_uri=None, mongo_database=None,
+        *args, **kwargs
+    ):
         self.pages_limit = int(pages_limit) if pages_limit is not None else None
         self.skip_contenu = skip_contenu
+        self.only_root_documents = only_root_documents
         self.only_id = only_id
+        self.force_rescrape = force_rescrape
+        self.mongo_provider = MongoProvider(mongo_uri, mongo_database)
+        self.last_scraped_item = self.find_last_scraped_item()
         super(InseeSpider, self).__init__(*args, **kwargs)
+
+    def find_last_scraped_item(self):
+        collection = self.mongo_provider.get_collection()
+        last_items = collection. \
+            find({"_scrapy_item_class": "RootDocument"}). \
+            sort("dateDiffusion", -1). \
+            limit(1)
+        return last_items[0] if last_items.count() else None
 
     def start_requests(self):
         return [
@@ -61,14 +86,14 @@ class InseeSpider(scrapy.Spider):
             callback=self.parse_search_results
         )
 
-    def series_request(self, insee_id, page=1):
+    def series_request(self, id_insee, page=1):
         query = {
             "q": "*:*",
             "start": (page - 1) * 100,
             "rows": 100,
             "facetsField":[],
             "filters": [
-                {"field":"bdm_idFamille","values":["%s" % insee_id]}
+                {"field":"bdm_idFamille","values":["%s" % id_insee]}
             ],
             "sortFields": [
                 {"field": "dateDiffusion", "order": "desc"},
@@ -85,7 +110,7 @@ class InseeSpider(scrapy.Spider):
             },
             callback=self.parse_series_results
         )
-        request.meta["insee_id"] = insee_id
+        request.meta["id_insee"] = id_insee
         request.meta["page"] = page
         return request
 
@@ -99,15 +124,21 @@ class InseeSpider(scrapy.Spider):
             yield(serie)
         if len(json_response["documents"]) == 100:
             yield(self.series_request(
-                response.meta["insee_id"],
+                response.meta["id_insee"],
                 page=response.meta["page"] + 1)
             )
 
     def parse_search_results(self, response):
         res = json.loads(response.text)
+        last_scraped_item_reached = False
         for document in res["documents"]:
             loader = RootDocumentLoader(RootDocument())
             document["id_insee"] = document.pop("id")
+            if self.last_scraped_item and document["id_insee"] == self.last_scraped_item["id_insee"]:
+                logging.info("reached last scraped item %s, will stop at the end of this page." % document["id_insee"])
+                last_scraped_item_reached = True
+                # we don't return here because we're not super confident with the sort order,
+                # so this should do a few extra requests but avoid missing too many new itmes
             loader.add_value(None, document)
             loader.add_value("custom", {})
             item = loader.load_item()
@@ -121,11 +152,12 @@ class InseeSpider(scrapy.Spider):
                 yield(request)
             elif item.get("categorie", {}).get("libelleFr") == "Séries chronologiques":
                 item["custom"]["insee_url"] = "https://insee.fr/fr/statistiques/series/%s" % item["id_insee"]
-                yield(self.series_request(item["id_insee"]))
+                if not self.only_root_documents:
+                    yield(self.series_request(item["id_insee"]))
                 yield(item)
             else:
                 yield(item)
-        if len(res["documents"]):
+        if len(res["documents"]) and (not last_scraped_item_reached or self.force_rescrape):
             yield(self.next_page_request())
 
     def parse_statistiques(self, response):
