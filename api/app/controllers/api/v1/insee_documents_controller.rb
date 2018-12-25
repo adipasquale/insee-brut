@@ -5,7 +5,7 @@ class Api::V1::InseeDocumentsController < ApplicationController
     page = index_params[:page]&.to_i || 1
     include_html = ["true", "1"].include?(index_params[:include_html])
     operations = [
-      {"$match": {"_scrapy_item_class": "Statistiques"}},
+      {"$match": {"_scrapy_item_class": "RootDocument"}},
       (include_html ? nil : {"$project": {"contenu_html": 0}}),
       {"$sort": {dateDiffusion: -1}},
       {"$skip": (page - 1) * count},

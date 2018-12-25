@@ -4,7 +4,7 @@ import logging
 import re
 import json
 import urllib
-from insee_crawler.items import StatistiquesLoader, Statistiques, SerieLoader, Serie
+from insee_crawler.items import RootDocumentLoader, RootDocument, SerieLoader, Serie
 
 class InseeSpider(scrapy.Spider):
     name = 'insee'
@@ -106,7 +106,7 @@ class InseeSpider(scrapy.Spider):
     def parse_search_results(self, response):
         res = json.loads(response.text)
         for document in res["documents"]:
-            loader = StatistiquesLoader(Statistiques())
+            loader = RootDocumentLoader(RootDocument())
             document["id_insee"] = document.pop("id")
             loader.add_value(None, document)
             loader.add_value("custom", {})
@@ -153,3 +153,4 @@ class InseeSpider(scrapy.Spider):
             item["contenu_html"] = response.css("#consulter").extract_first()
 
         yield(item)
+

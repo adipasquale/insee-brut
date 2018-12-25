@@ -10,8 +10,8 @@ class Serie(dict, BaseItem):
 class SerieLoader(ItemLoader):
     default_output_processor = TakeFirst()
 
-class Statistiques(dict, BaseItem):
+class RootDocument(dict, BaseItem):
     pass
 
-class StatistiquesLoader(ItemLoader):
+class RootDocumentLoader(ItemLoader):
     default_output_processor = TakeFirst()

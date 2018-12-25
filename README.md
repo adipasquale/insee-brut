@@ -136,7 +136,7 @@ db.insee_items.aggregate([
 investigate the sorting order key :
 
 ```
-db.insee_items.find({"_scrapy_item_class": "Statistiques"}, {_id:0, famille: 0, contenu_html: 0, custom: 0, themes:0, etat:0}).limit(5).sort({dateDiffusion: -1}).pretty()
+db.insee_items.find({"_scrapy_item_class": "RootDocument"}, {_id:0, famille: 0, contenu_html: 0, custom: 0, themes:0, etat:0}).limit(5).sort({dateDiffusion: -1}).pretty()
 ```
 
 ### testing INSEE solr API

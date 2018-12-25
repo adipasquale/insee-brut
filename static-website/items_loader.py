@@ -17,7 +17,7 @@ class ItemsLoader:
             return self.load_from_mongo()
 
     def load_from_mongo(self):
-        cursor = self.db.insee_items.find({"_scrapy_item_class": "Statistiques"}).sort("dateDiffusion", -1)
+        cursor = self.db.insee_items.find({"_scrapy_item_class": "RootDocument"}).sort("dateDiffusion", -1)
         items = [i for i in cursor]
         print("%s items were loaded from mongo." % len(items))
         pickle.dump(items, open(CACHE_PICKLE_PATH, "wb"))
