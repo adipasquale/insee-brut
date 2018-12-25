@@ -5,6 +5,10 @@
 # just to avoid paying for scrapinghub schedule feature
 # which is not very nice sorry :/
 
+# server's crontab contains
+# SH_APIKEY=xxxx
+# 0 3 * * * python3 /path/to/schedule_on_scrapinghub.py
+
 from scrapinghub import ScrapinghubClient
 
 client = ScrapinghubClient()
