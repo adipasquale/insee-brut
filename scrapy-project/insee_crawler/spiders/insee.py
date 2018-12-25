@@ -131,14 +131,15 @@ class InseeSpider(scrapy.Spider):
     def parse_search_results(self, response):
         res = json.loads(response.text)
         last_scraped_item_reached = False
+        counter_before_end = None
         for document in res["documents"]:
             loader = RootDocumentLoader(RootDocument())
             document["id_insee"] = document.pop("id")
             if self.last_scraped_item and document["id_insee"] == self.last_scraped_item["id_insee"]:
-                logging.info("reached last scraped item %s, will stop at the end of this page." % document["id_insee"])
+                # dirty algo : scrap 8 more items max or end with the current page
+                logging.info("reached last scraped item %s, will end scraping soon .." % document["id_insee"])
                 last_scraped_item_reached = True
-                # we don't return here because we're not super confident with the sort order,
-                # so this should do a few extra requests but avoid missing too many new itmes
+                counter_before_end = 8
             loader.add_value(None, document)
             loader.add_value("custom", {})
             item = loader.load_item()
@@ -157,6 +158,10 @@ class InseeSpider(scrapy.Spider):
                 yield(item)
             else:
                 yield(item)
+            if counter_before_end is not None and not self.force_rescrape:
+                counter_before_end -= 1
+                if counter_before_end <= 0:
+                    return
         if len(res["documents"]) and (not last_scraped_item_reached or self.force_rescrape):
             yield(self.next_page_request())
 
