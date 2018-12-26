@@ -1,5 +1,12 @@
 class Api::V1::RootDocumentsController < ApplicationController
 
+  resource_description do
+    short "Top level documents"
+    description <<-EOS
+      The Root Documents are the one that appear at the top level on the Insee.fr website.
+    EOS
+  end
+
   def_param_group :root_document do
     property :id_insee, :number, desc: "The ID on the insee.fr site"
     property :auteur, String, desc: 'The author(s) name(s)'
