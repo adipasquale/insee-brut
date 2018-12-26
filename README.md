@@ -56,20 +56,7 @@ The api is a Rails API project. It doesn't use ActiveRecord but Mongoid instead.
 
 The production version is accessible at [api.insee.pw](http://api.insee.pw/)
 
-### API Routes
-
-All routes return JSON only. No authentication required yet.
-
-`GET /api/v1/insee_documents` : lists documents.
-
-Accepted parameters :
-- `page` : the requested page number. should be a positive integer. defaults to 1.
-- `count` : the number of items to return per page. should be a positive integer. defaults to 50.
-- `include_html` : considered true if contains "1" or "true". By default the documents won't contain the HTML in the contenu_html key, to avoid too slow/heavy answers.
-
-`GET /api/v1/insee_documents/:id` : fetches a single document. The id in the route is the INSEE ID, not the MongoDB ObjectId.
-
-No accepted parameters yet
+You can find the full documentation for the API here : [http://api.insee.pw/api/docs](http://api.insee.pw/api/docs)
 
 ### Local setup for the API
 
@@ -112,13 +99,6 @@ We are switching to a React app that hits the API instead, to reach a more app-l
 ```
 mongodump --uri=mongodb://USER:PASSWORD@68.183.79.212/insee_brut
 mongorestore --drop -d insee_brut dump/insee_brut
-```
-
-### Create mongo indexes
-
-```
-db.insee_items.createIndex({_scrapy_item_class: 1, dateDiffusion: -1});
-db.insee_items.createIndex({id_insee: 1});
 ```
 
 ### Useful mongo queries for exploration

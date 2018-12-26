@@ -159,8 +159,8 @@ production:
       hosts:
         - <%= ENV.fetch("MONGODB_HOST", "localhost:27017") %>
       options:
-        user: <%= ENV.fetch("MONGODB_USERNAME") %>
-        password: <%= ENV.fetch("MONGODB_PASSWORD") %>
+        user: <%= ENV.fetch("MONGODB_USERNAME", "") %>
+        password: <%= ENV.fetch("MONGODB_PASSWORD", "") %>
 test:
   clients:
     default:

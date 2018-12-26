@@ -1,5 +1,5 @@
-class InseeDocument
+class RootDocument
   include Mongoid::Document
-  store_in collection: "insee_items"
+  store_in collection: "root_documents"
   include Mongoid::Attributes::Dynamic
 end
