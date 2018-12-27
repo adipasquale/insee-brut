@@ -1,13 +1,12 @@
-import React, { Component } from 'react'
+import React, {Component} from 'react'
+import HomeContainer from './containers/HomeContainer'
 
 class App extends Component {
-  render() {
-    return (
-      <div className="App">
-
-      </div>
-    )
-  }
+	render() {
+		return (
+			<HomeContainer/>
+		)
+	}
 }
 
-export default App;
+export default App
