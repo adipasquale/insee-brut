@@ -36,6 +36,7 @@ group :development do
 end
 
 gem 'mongoid', '>= 7.0.2'
+gem 'mongo'
 gem 'apipie-rails', '~> 0.5.14'
 
 # Windows does not include zoneinfo files, so bundle the tzinfo-data gem
