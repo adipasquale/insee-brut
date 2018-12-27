@@ -4,10 +4,10 @@ Mirror site for INSEE data aimed to be exhaustive, faster and easier to browse.
 
 The project is splitted into 3 parts :
 
-- 1 - [Scraper](#scraper)
-- 2 - [API](#api)
-- 3 - [Static Website [Deprecated]](#static-website-deprecated)
-- 4 - [React Website](#react-website)
+- 1 - [Scraper](#1-scraper)
+- 2 - [API](#2-api)
+- 3 - [Static Website [Deprecated]](#3-static-website-deprecated)
+- 4 - [React Website](#4-react-website)
 
 ![Project Architecture](https://www.lucidchart.com/publicSegments/view/0b054d24-4603-4817-b972-1004a0a539ad/image.png)
 
@@ -83,6 +83,15 @@ You can deploy new version of the apps using this command :
 ```sh
 git subtree push --prefix api production master
 ```
+
+### One-Off Tasks
+
+The main task that's in the API for convenience reasons is `rake prepare:db`.
+What it does is filter, clean and augment raw scraped items to more usable ones.
+It fetches documents that were scraped from the `insee_items` MongoDB collection, and then creates new ones in other collections such as `root_documents`.
+
+This script should be ran after each scraping session.
+It can be optimized.
 
 ## 3. Static Website [Deprecated]
 
