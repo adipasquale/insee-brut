@@ -19,7 +19,7 @@ It's a Python 3 project that uses the great [Scrapy framework](https://scrapy.or
 The spider runs daily on [ScrapingHub](https://scrapinghub.com/).
 It scraps incrementally all the data, meaning it won't go through all pages every day.
 
-**Local setup**
+### Local setup
 
 ```
 cd scrapy-project
@@ -34,7 +34,7 @@ To start a crawl :
 scrapy crawl insee
 ```
 
-**Deploy Scrapy spider to Scrapinghub**
+### Deploy Scrapy spider to Scrapinghub
 
 The first time, you need the shub dependency
 
@@ -58,7 +58,7 @@ The production version is accessible at [api.insee.pw](http://api.insee.pw/)
 
 You can find the full documentation for the API here : [http://api.insee.pw/api/docs](http://api.insee.pw/api/docs)
 
-**Local setup for the API**
+### Local setup for the API
 
 ```sh
 cd `api`
@@ -67,13 +67,13 @@ gem install bundler && bundle install
 
 Optionally work on a split RVM gemset to make sure your dependencies are well isolated.
 
-**Locally serve the API**
+### Locally serve the API
 
 ```
 rails s
 ```
 
-**Deploy the API**
+### Deploy the API
 
 The API is hosted on the Digital Ocean droplet.
 This droplet uses [dokku](http://dokku.viewdocs.io/dokku/) to host different apps, and provide Heroku-like ease-of-use.
@@ -92,13 +92,13 @@ Currently the app is a fully statically built website. It's done using custom py
 
 We are switching to a React app that hits the API instead, to reach a more app-like site.
 
-**Local Setup** 
+##Local Setup 
 ```
-cd client
+cd client; 
 npm install
 ```
 
-**Run local server**
+##Run local server
 ```
 npm start
 ```
@@ -106,14 +106,14 @@ npm start
 
 ## Misc
 
-**Dump prod DB locally**
+### Dump prod DB locally
 
 ```
 mongodump --uri=mongodb://USER:PASSWORD@68.183.79.212/insee_brut
 mongorestore --drop -d insee_brut dump/insee_brut
 ```
 
-**Useful mongo queries for exploration**
+### Useful mongo queries for exploration
 
 find the Series with the most Serie in it
 
@@ -131,7 +131,7 @@ investigate the sorting order key :
 db.insee_items.find({"_scrapy_item_class": "RootDocument"}, {_id:0, famille: 0, contenu_html: 0, custom: 0, themes:0, etat:0}).limit(5).sort({dateDiffusion: -1}).pretty()
 ```
 
-**testing INSEE solr API**
+### testing INSEE solr API
 
 The INSEE search page uses an AJAX call to un unprotected JSON API that gives us a lot of details.
 
