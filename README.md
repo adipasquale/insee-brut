@@ -101,6 +101,18 @@ Currently the app is a fully statically built website. It's done using custom py
 
 We are switching to a React app that hits the API instead, to reach a more app-like site.
 
+##Local Setup 
+```
+cd client; 
+npm install
+```
+
+##Run local server
+```
+npm start
+```
+
+
 ## Misc
 
 ### Dump prod DB locally
