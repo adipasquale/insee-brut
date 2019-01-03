@@ -1,12 +1,10 @@
-import React from 'react'
-import PanelComponenent from "../components/PanelComponent";
+import React from 'react';
+import PanelComponent from '../components/PanelComponent';
 
 class HomeContainer extends React.Component {
   render() {
-    return (
-        <PanelComponenent/>
-    )
+    return <PanelComponent />;
   }
 }
 
-export default HomeContainer
+export default HomeContainer;

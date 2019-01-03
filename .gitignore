@@ -45,3 +45,4 @@ client/yarn-error.log*
 client/yarn.lock
 
 .idea
+.vscode
