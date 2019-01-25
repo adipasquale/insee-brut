@@ -1,21 +1,19 @@
 import React, { Fragment } from 'react';
-import PropTypes from 'prop-types';
+// import PropTypes from 'prop-types';
 
-interface propTypes {
-  menu: Array;
-}
-const PanelComponenent = ({ menu }) => (
+const PanelComponenent = ({ menu, onItemClick }) => (
   <Fragment>
     <div className="bg-moon-gray vh-100 fl w-10">
       <ul>
         {menu.map(element => (
           <li>
-            <a href="#">{element.title}</a>
+            <a href="#" onClick={() => onItemClick(element.id)}>
+              {element.title}
+            </a>
           </li>
         ))}
       </ul>
     </div>
-    {/* <PanelComponenent menu2={menu.link} /> */}
   </Fragment>
 );
 
