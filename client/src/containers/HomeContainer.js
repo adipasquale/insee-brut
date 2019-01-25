@@ -76,13 +76,23 @@ const tree = [
     key: "location"
   }
 ];
+
+clicked = () => {
+  console.log("clicked!");
+};
 class HomeContainer extends React.Component {
   constructor(props) {
-    super(props), (this.state = {});
+    super(props);
+    this.state = {
+      clicked: []
+    };
   }
   render() {
     return (
       <Fragment>
+        <button type="submit" onClick={this.clicked}>
+          Click!
+        </button>
         <PanelComponent menu={tree} />
       </Fragment>
     );
