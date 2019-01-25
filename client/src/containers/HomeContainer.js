@@ -1,11 +1,14 @@
-import React from 'react'
+import React, { Fragment } from "react";
+import PanelComponent from "../components/PanelComponent";
 
 class HomeContainer extends React.Component {
   render() {
     return (
-        <div>Coucou</div>
-    )
+      <Fragment>
+        <PanelComponent />
+      </Fragment>
+    );
   }
 }
 
-export default HomeContainer
+export default HomeContainer;
