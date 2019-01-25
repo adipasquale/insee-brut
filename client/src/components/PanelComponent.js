@@ -1,7 +1,7 @@
 import React from "react";
 
 const PanelComponent = () => {
-  return <div>coucou</div>;
+  return <div bg-dark-red>coucou</div>;
 };
 
 export default PanelComponent;
