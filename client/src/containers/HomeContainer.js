@@ -77,9 +77,6 @@ const tree = [
   }
 ];
 
-clicked = () => {
-  console.log("clicked!");
-};
 class HomeContainer extends React.Component {
   constructor(props) {
     super(props);
@@ -87,13 +84,22 @@ class HomeContainer extends React.Component {
       clicked: []
     };
   }
+
+  clicked = id => {
+    const { clicked } = this.state;
+    clicked.push(id);
+    this.setState({ clicked });
+    console.log(this.state);
+  };
+
   render() {
+    const { clicked } = this.state;
     return (
       <Fragment>
-        <button type="submit" onClick={this.clicked}>
-          Click!
-        </button>
-        <PanelComponent menu={tree} />
+        <PanelComponent menu={tree} clickedItem={this.clicked} />
+        {clicked.map(el => (
+          <PanelComponent menu={tree} clickedItem={this.clicked} />
+        ))}
       </Fragment>
     );
   }

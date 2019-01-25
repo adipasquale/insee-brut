@@ -1,11 +1,17 @@
 import React from "react";
 
-const PanelComponent = ({ menu }) => {
+const PanelComponent = ({ menu, clickedItem }) => {
   return (
     <div className="bg-moon-gray vh-100 fl w-10">
       <ul>
         {menu.map(el => {
-          return <li>{el.id}</li>;
+          return (
+            <li>
+              <a href="#" onClick={() => clickedItem(el.id)}>
+                {el.id}
+              </a>
+            </li>
+          );
         })}
       </ul>
     </div>
