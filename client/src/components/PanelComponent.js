@@ -8,7 +8,7 @@ const PanelComponent = ({ menu, clickedItem }) => {
           return (
             <li>
               <a href="#" onClick={() => clickedItem(el.id)}>
-                {el.id}
+                {el.title}
               </a>
             </li>
           );

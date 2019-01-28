@@ -81,7 +81,8 @@ class HomeContainer extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      clicked: []
+      clicked: [],
+      lastClicked: null
     };
   }
 
@@ -89,17 +90,50 @@ class HomeContainer extends React.Component {
     const { clicked } = this.state;
     clicked.push(id);
     this.setState({ clicked });
-    console.log(this.state);
+    const lastId = clicked[clicked.length - 1];
+
+    let { lastClicked } = this.state;
+    console.log(lastClicked);
+    lastClicked = this.getElementById(tree, lastId);
+    if (lastClicked.children) {
+      this.setState({ lastClicked });
+    }
+    console.log("---- clicked", this.state.clicked);
+    console.log("---- LastClicked", lastClicked);
+  };
+
+  getElementById = (tree, id) => {
+    const item = tree.find(el => el.id === id);
+
+    if (item) {
+      return item;
+    }
+
+    let isFound = null;
+    let i = 0;
+    while (i < tree.length || !isFound) {
+      if (tree[i].children) {
+        isFound = this.getElementById(tree[i].children, id);
+      }
+      i++;
+    }
+    return isFound;
   };
 
   render() {
     const { clicked } = this.state;
+    const { lastClicked } = this.state;
     return (
       <Fragment>
         <PanelComponent menu={tree} clickedItem={this.clicked} />
-        {clicked.map(el => (
-          <PanelComponent menu={tree} clickedItem={this.clicked} />
-        ))}
+        {lastClicked !== null &&
+          lastClicked.children &&
+          clicked.map(el => (
+            <PanelComponent
+              menu={lastClicked.children}
+              clickedItem={this.clicked}
+            />
+          ))}
       </Fragment>
     );
   }
