@@ -93,13 +93,10 @@ class HomeContainer extends React.Component {
     const lastId = clicked[clicked.length - 1];
 
     let { lastClicked } = this.state;
-    console.log(lastClicked);
     lastClicked = this.getElementById(tree, lastId);
     if (lastClicked.children) {
       this.setState({ lastClicked });
     }
-    console.log("---- clicked", this.state.clicked);
-    console.log("---- LastClicked", lastClicked);
   };
 
   getElementById = (tree, id) => {
@@ -130,6 +127,7 @@ class HomeContainer extends React.Component {
           lastClicked.children &&
           clicked.map(el => (
             <PanelComponent
+              key={el.id}
               menu={lastClicked.children}
               clickedItem={this.clicked}
             />
