@@ -1,13 +1,13 @@
 import React from "react";
 
-const PanelComponent = ({ menu, clickedItem, panelId }) => {
+const PanelComponent = ({ menuTree, onItemClicked, level }) => {
   return (
     <div className="bg-moon-gray vh-100 fl w-10">
       <ul>
-        {menu.map(el => {
+        {Object.values(menuTree.children).map(el => {
           return (
             <li key={el.id}>
-              <button key={el.id} onClick={() => clickedItem(panelId, el.id)}>
+              <button key={el.id} onClick={() => onItemClicked(el.id, level)}>
                 {el.id}
               </button>
             </li>
