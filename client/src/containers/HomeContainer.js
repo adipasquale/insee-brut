@@ -81,24 +81,33 @@ class HomeContainer extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      clicked: [],
-      lastClicked: null
+      clickedItems: [],
+      lastItemClicked: null
     };
   }
 
-  clicked = id => {
-    const { clicked } = this.state;
-    clicked.push(id);
-    this.setState({ clicked });
-    const lastId = clicked[clicked.length - 1];
+  clickedItem = (panelId, itemId) => {
+    console.log("--- item ID", itemId);
+    console.log("--- panel ID", panelId);
 
-    let { lastClicked } = this.state;
-    lastClicked = this.getElementById(tree, lastId);
-    if (lastClicked.children) {
-      this.setState({ lastClicked });
+    const lastId = itemId;
+    let { lastItemClicked } = this.state;
+    lastItemClicked = this.getElementById(tree, lastId);
+    this.setState({ lastItemClicked });
+
+    if (lastItemClicked.children) {
+      const { clickedItems } = this.state;
+      console.log("--- clickedItems length", clickedItems.length);
+      if (panelId === clickedItems.length) {
+        clickedItems.push(lastId);
+        console.log("--- NEW clickedItems length", clickedItems.length);
+        this.setState({ clickedItems });
+      } else if (panelId < clickedItems.length) {
+        const itemsToDelete = clickedItems.length - panelId;
+        clickedItems.splice(panelId, itemsToDelete);
+      }
     }
   };
-
   getElementById = (tree, id) => {
     const item = tree.find(el => el.id === id);
 
@@ -118,18 +127,26 @@ class HomeContainer extends React.Component {
   };
 
   render() {
-    const { clicked } = this.state;
-    const { lastClicked } = this.state;
+    const { clickedItems } = this.state;
+    const { lastItemClicked } = this.state;
     return (
       <Fragment>
-        <PanelComponent menu={tree} clickedItem={this.clicked} />
-        {lastClicked !== null &&
-          lastClicked.children &&
-          clicked.map(el => (
+        <PanelComponent
+          panelId={0}
+          menu={tree}
+          clickedItem={this.clickedItem}
+        />
+        {lastItemClicked !== null && !lastItemClicked.children && (
+          <p>Contenu de l'item avec l'id {lastItemClicked.id}</p>
+        )}
+        {lastItemClicked !== null &&
+          lastItemClicked.children &&
+          clickedItems.map(el => (
             <PanelComponent
               key={el.id}
-              menu={lastClicked.children}
-              clickedItem={this.clicked}
+              menu={lastItemClicked.children}
+              clickedItem={this.clickedItem}
+              panelId={el}
             />
           ))}
       </Fragment>
